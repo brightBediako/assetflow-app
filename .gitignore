@@ -2,3 +2,23 @@
 .Cursor
 .vscode
 context/
+!context/AGENTS.md
+.agents/skills/
+!context/AGENTS.md
+.agents/skills/architect/
+!context/AGENTS.md
+!context/architecture.md
+!context/build-plan.md
+!context/progress-tracker.md
+
+# Android
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/build/
