@@ -10,7 +10,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.assetflow.mobile.core.ui.components.ThemePreviewScreen
+import com.assetflow.mobile.core.data.mock.MockDataRepository
+import com.assetflow.mobile.core.ui.components.ComponentsPreviewScreen
+import com.assetflow.mobile.core.ui.components.MainAppScaffold
+import com.assetflow.mobile.core.ui.components.MainScaffoldContent
+import com.assetflow.mobile.core.ui.components.PlaceholderScreen
+
+private val PreviewOrganizationName: String
+    get() = MockDataRepository.organization.name
 
 @Composable
 fun AppNavHost(
@@ -32,8 +39,54 @@ fun AppNavHost(
             )
         }
 
-        composable(Routes.Dashboard) {
-            ThemePreviewScreen()
+        MainDestination.entries.forEach { destination ->
+            composable(destination.route) {
+                MainTabRoute(
+                    destination = destination,
+                    navController = navController,
+                )
+            }
+        }
+
+        composable(Routes.Profile) {
+            PlaceholderScreen(
+                title = "Profile",
+                message = "Profile screen will be built in Phase 9.",
+            )
+        }
+    }
+}
+
+@Composable
+private fun MainTabRoute(
+    destination: MainDestination,
+    navController: NavHostController,
+) {
+    MainAppScaffold(
+        screenTitle = destination.label,
+        organizationName = PreviewOrganizationName,
+        selectedDestination = destination,
+        onDestinationSelected = { selected ->
+            navController.navigate(selected.route) {
+                popUpTo(Routes.Dashboard) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+        },
+        onProfileClick = {
+            navController.navigate(Routes.Profile)
+        },
+    ) { paddingValues ->
+        MainScaffoldContent(paddingValues = paddingValues) {
+            when (destination) {
+                MainDestination.Dashboard -> ComponentsPreviewScreen()
+                MainDestination.Assets -> PlaceholderScreen(title = "Assets")
+                MainDestination.Bookings -> PlaceholderScreen(title = "Bookings")
+                MainDestination.Maintenance -> PlaceholderScreen(title = "Maintenance")
+                MainDestination.Notifications -> PlaceholderScreen(title = "Notifications")
+            }
         }
     }
 }
