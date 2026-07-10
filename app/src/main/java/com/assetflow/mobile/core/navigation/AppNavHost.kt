@@ -10,14 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.assetflow.mobile.core.data.mock.MockDataRepository
-import com.assetflow.mobile.core.ui.components.ComponentsPreviewScreen
-import com.assetflow.mobile.core.ui.components.MainAppScaffold
-import com.assetflow.mobile.core.ui.components.MainScaffoldContent
-import com.assetflow.mobile.core.ui.components.PlaceholderScreen
-
-private val PreviewOrganizationName: String
-    get() = MockDataRepository.organization.name
+import com.assetflow.mobile.features.auth.presentation.LoginRoute
+import com.assetflow.mobile.features.auth.presentation.RegisterRoute
 
 @Composable
 fun AppNavHost(
@@ -32,61 +26,54 @@ fun AppNavHost(
         composable(Routes.Splash) {
             SplashRoute(
                 onFinished = {
-                    navController.navigate(Routes.Dashboard) {
+                    navController.navigate(Routes.Login) {
                         popUpTo(Routes.Splash) { inclusive = true }
                     }
                 },
             )
         }
 
-        MainDestination.entries.forEach { destination ->
-            composable(destination.route) {
-                MainTabRoute(
-                    destination = destination,
-                    navController = navController,
-                )
-            }
+        composable(Routes.Login) {
+            LoginRoute(
+                onLoginSuccess = {
+                    navController.navigate(Routes.Main) {
+                        popUpTo(Routes.Login) { inclusive = true }
+                    }
+                },
+                onCreateAccountClick = {
+                    navController.navigate(Routes.Register)
+                },
+            )
+        }
+
+        composable(Routes.Register) {
+            RegisterRoute(
+                onRegisterSuccess = {
+                    navController.navigate(Routes.Main) {
+                        popUpTo(Routes.Login) { inclusive = true }
+                    }
+                },
+                onBackToLoginClick = {
+                    navController.popBackStack()
+                },
+            )
+        }
+
+        composable(Routes.Main) {
+            MainAppNavHost(
+                rootNavController = navController,
+                onRequireLogin = {
+                    navController.navigate(Routes.Login) {
+                        popUpTo(Routes.Main) { inclusive = true }
+                    }
+                },
+            )
         }
 
         composable(Routes.Profile) {
-            PlaceholderScreen(
-                title = "Profile",
-                message = "Profile screen will be built in Phase 9.",
+            ProfileShellScreen(
+                onBackClick = { navController.popBackStack() },
             )
-        }
-    }
-}
-
-@Composable
-private fun MainTabRoute(
-    destination: MainDestination,
-    navController: NavHostController,
-) {
-    MainAppScaffold(
-        screenTitle = destination.label,
-        organizationName = PreviewOrganizationName,
-        selectedDestination = destination,
-        onDestinationSelected = { selected ->
-            navController.navigate(selected.route) {
-                popUpTo(Routes.Dashboard) {
-                    saveState = true
-                }
-                launchSingleTop = true
-                restoreState = true
-            }
-        },
-        onProfileClick = {
-            navController.navigate(Routes.Profile)
-        },
-    ) { paddingValues ->
-        MainScaffoldContent(paddingValues = paddingValues) {
-            when (destination) {
-                MainDestination.Dashboard -> ComponentsPreviewScreen()
-                MainDestination.Assets -> PlaceholderScreen(title = "Assets")
-                MainDestination.Bookings -> PlaceholderScreen(title = "Bookings")
-                MainDestination.Maintenance -> PlaceholderScreen(title = "Maintenance")
-                MainDestination.Notifications -> PlaceholderScreen(title = "Notifications")
-            }
         }
     }
 }

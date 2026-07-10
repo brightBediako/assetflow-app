@@ -41,7 +41,13 @@ enum class MainDestination(
     ;
 
     companion object {
-        fun fromRoute(route: String?): MainDestination? =
-            entries.firstOrNull { it.route == route }
+        fun fromRoute(route: String?): MainDestination? {
+            if (route == null) return null
+            entries.firstOrNull { it.route == route }?.let { return it }
+            if (route.startsWith("assets/")) return Assets
+            if (route.startsWith("bookings/")) return Bookings
+            if (route.startsWith("maintenance/")) return Maintenance
+            return null
+        }
     }
 }

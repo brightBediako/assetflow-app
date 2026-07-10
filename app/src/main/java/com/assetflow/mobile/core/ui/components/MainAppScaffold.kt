@@ -17,6 +17,9 @@ fun MainAppScaffold(
     onDestinationSelected: (MainDestination) -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
+    userName: String? = null,
+    notificationBadgeCount: Int = 0,
+    onBackClick: (() -> Unit)? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
@@ -25,13 +28,16 @@ fun MainAppScaffold(
             AssetFlowTopAppBar(
                 title = screenTitle,
                 organizationName = organizationName,
+                userName = userName,
                 onProfileClick = onProfileClick,
+                onBackClick = onBackClick,
             )
         },
         bottomBar = {
             AssetFlowBottomNavigation(
                 selectedDestination = selectedDestination,
                 onDestinationSelected = onDestinationSelected,
+                notificationBadgeCount = notificationBadgeCount,
             )
         },
         containerColor = androidx.compose.material3.MaterialTheme.colorScheme.background,

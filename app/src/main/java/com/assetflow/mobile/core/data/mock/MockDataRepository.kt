@@ -3,15 +3,19 @@ package com.assetflow.mobile.core.data.mock
 import com.assetflow.mobile.core.domain.model.AppNotification
 import com.assetflow.mobile.core.domain.model.Asset
 import com.assetflow.mobile.core.domain.model.Booking
+import com.assetflow.mobile.core.domain.model.BookingTrendPoint
 import com.assetflow.mobile.core.domain.model.CategorySummary
 import com.assetflow.mobile.core.domain.model.DashboardActivity
 import com.assetflow.mobile.core.domain.model.DashboardSummary
+import com.assetflow.mobile.core.domain.model.MaintenanceStatusCount
+import com.assetflow.mobile.core.domain.model.OperationalStatusCount
 import com.assetflow.mobile.core.domain.model.MaintenanceHistoryEntry
 import com.assetflow.mobile.core.domain.model.MaintenanceRecord
 import com.assetflow.mobile.core.domain.model.MaintenanceStatus
 import com.assetflow.mobile.core.domain.model.OperationalStatus
 import com.assetflow.mobile.core.domain.model.Organization
 import com.assetflow.mobile.core.domain.model.User
+import com.assetflow.mobile.core.domain.model.UserRole
 
 /**
  * Central access point for UI prototype dummy data.
@@ -24,9 +28,9 @@ object MockDataRepository {
 
     val assets: List<Asset> get() = MockAssets.assets
 
-    val bookings: List<Booking> get() = MockBookings.bookings
+    val bookings: List<Booking> get() = MockBookingStore.bookings
 
-    val maintenanceRecords: List<MaintenanceRecord> get() = MockMaintenance.records
+    val maintenanceRecords: List<MaintenanceRecord> get() = MockMaintenanceStore.records
 
     val notifications: List<AppNotification> get() = MockNotifications.notifications
 
@@ -36,12 +40,21 @@ object MockDataRepository {
 
     val categoryDistribution: List<CategorySummary> get() = MockDashboard.categoryDistribution
 
+    val bookingTrend: List<BookingTrendPoint> get() = MockDashboard.bookingTrend
+
+    val assetAvailabilityBreakdown: List<OperationalStatusCount> get() =
+        MockDashboard.assetAvailabilityBreakdown
+
+    val maintenanceStatusCounts: List<MaintenanceStatusCount> get() =
+        MockDashboard.maintenanceStatusCounts
+
     fun getAssetById(assetId: String): Asset? = MockAssets.getAssetById(assetId)
 
-    fun getBookingById(bookingId: String): Booking? = MockBookings.getBookingById(bookingId)
+    fun getBookingById(bookingId: String): Booking? =
+        MockBookingStore.bookings.firstOrNull { it.id == bookingId }
 
     fun getMaintenanceById(maintenanceId: String): MaintenanceRecord? =
-        MockMaintenance.getMaintenanceById(maintenanceId)
+        MockMaintenanceStore.records.firstOrNull { it.id == maintenanceId }
 
     fun getNotificationById(notificationId: String): AppNotification? =
         MockNotifications.getNotificationById(notificationId)
@@ -49,22 +62,46 @@ object MockDataRepository {
     fun getUserById(userId: String): User? = MockUsers.getUserById(userId)
 
     fun getBookingsForAsset(assetId: String): List<Booking> =
-        MockBookings.getBookingsForAsset(assetId)
+        MockBookingStore.bookings.filter { it.assetId == assetId }
 
     fun getBookingsForCurrentUser(): List<Booking> =
-        MockBookings.getBookingsForUser(currentUser.id)
+        MockBookingStore.bookings.filter { it.requesterId == currentUser.id }
 
-    fun getPendingApprovals(): List<Booking> = MockBookings.getPendingApprovals()
+    fun getPendingApprovals(): List<Booking> =
+        MockBookingStore.bookings.filter { it.status == OperationalStatus.Pending }
 
-    fun getUpcomingBookings(): List<Booking> = MockBookings.getUpcomingBookings()
+    fun getUpcomingBookings(): List<Booking> = MockBookingStore.bookings.filter {
+        it.status == OperationalStatus.Pending ||
+            it.status == OperationalStatus.Approved ||
+            it.status == OperationalStatus.Active
+    }
 
-    fun getPastBookings(): List<Booking> = MockBookings.getPastBookings()
+    fun getPastBookings(): List<Booking> = MockBookingStore.bookings.filter {
+        it.status == OperationalStatus.Completed ||
+            it.status == OperationalStatus.Cancelled
+    }
+
+    fun getUpcomingBookingsForCurrentUser(): List<Booking> =
+        getBookingsForCurrentUser().filter {
+            it.status == OperationalStatus.Pending ||
+                it.status == OperationalStatus.Approved ||
+                it.status == OperationalStatus.Active
+        }
+
+    fun getPastBookingsForCurrentUser(): List<Booking> =
+        getBookingsForCurrentUser().filter {
+            it.status == OperationalStatus.Completed ||
+                it.status == OperationalStatus.Cancelled
+        }
+
+    fun canManageApprovals(): Boolean =
+        currentUser.role == UserRole.Admin || currentUser.role == UserRole.Manager
 
     fun getMaintenanceForAsset(assetId: String): List<MaintenanceRecord> =
-        MockMaintenance.getMaintenanceForAsset(assetId)
+        MockMaintenanceStore.records.filter { it.assetId == assetId }
 
     fun getMaintenanceHistory(maintenanceId: String): List<MaintenanceHistoryEntry> =
-        MockMaintenance.getHistoryForMaintenance(maintenanceId)
+        MockMaintenanceStore.history.filter { it.maintenanceId == maintenanceId }
 
     fun getAssetsByCategory(category: String): List<Asset> =
         MockAssets.getAssetsByCategory(category)
@@ -73,7 +110,7 @@ object MockDataRepository {
         MockAssets.getAssetsByStatus(status)
 
     fun getMaintenanceByStatus(status: MaintenanceStatus): List<MaintenanceRecord> =
-        MockMaintenance.records.filter { it.status == status }
+        MockMaintenanceStore.records.filter { it.status == status }
 
     fun getUnreadNotificationCount(): Int = MockNotifications.getUnreadCount()
 

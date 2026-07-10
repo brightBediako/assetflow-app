@@ -18,3 +18,18 @@ data class CategorySummary(
     val category: String,
     val assetCount: Int,
 )
+
+data class BookingTrendPoint(
+    val label: String,
+    val count: Int,
+)
+
+data class MaintenanceStatusCount(
+    val status: MaintenanceStatus,
+    val count: Int,
+)
+
+data class OperationalStatusCount(
+    val status: OperationalStatus,
+    val count: Int,
+)

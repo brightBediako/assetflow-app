@@ -1,10 +1,13 @@
 package com.assetflow.mobile.core.data.mock
 
+import com.assetflow.mobile.core.domain.model.BookingTrendPoint
 import com.assetflow.mobile.core.domain.model.CategorySummary
 import com.assetflow.mobile.core.domain.model.DashboardActivity
 import com.assetflow.mobile.core.domain.model.DashboardSummary
 import com.assetflow.mobile.core.domain.model.MaintenanceStatus
+import com.assetflow.mobile.core.domain.model.MaintenanceStatusCount
 import com.assetflow.mobile.core.domain.model.OperationalStatus
+import com.assetflow.mobile.core.domain.model.OperationalStatusCount
 
 object MockDashboard {
     val summary: DashboardSummary by lazy {
@@ -65,22 +68,41 @@ object MockDashboard {
             .sortedByDescending { it.assetCount }
     }
 
-    val bookingTrend = listOf(
-        "Mon" to 3,
-        "Tue" to 5,
-        "Wed" to 4,
-        "Thu" to 6,
-        "Fri" to 8,
-        "Sat" to 2,
-        "Sun" to 1,
+    val bookingTrend: List<BookingTrendPoint> = listOf(
+        BookingTrendPoint(label = "Mon", count = 3),
+        BookingTrendPoint(label = "Tue", count = 5),
+        BookingTrendPoint(label = "Wed", count = 4),
+        BookingTrendPoint(label = "Thu", count = 6),
+        BookingTrendPoint(label = "Fri", count = 8),
+        BookingTrendPoint(label = "Sat", count = 2),
+        BookingTrendPoint(label = "Sun", count = 1),
     )
 
-    val maintenanceStatusSummary by lazy {
-        mapOf(
-            MaintenanceStatus.Scheduled to MockMaintenance.records.count { it.status == MaintenanceStatus.Scheduled },
-            MaintenanceStatus.DueSoon to MockMaintenance.records.count { it.status == MaintenanceStatus.DueSoon },
-            MaintenanceStatus.Overdue to MockMaintenance.records.count { it.status == MaintenanceStatus.Overdue },
-            MaintenanceStatus.Completed to MockMaintenance.records.count { it.status == MaintenanceStatus.Completed },
-        )
+    val assetAvailabilityBreakdown: List<OperationalStatusCount> by lazy {
+        listOf(
+            OperationalStatus.Available,
+            OperationalStatus.Booked,
+            OperationalStatus.MaintenanceDue,
+            OperationalStatus.Unavailable,
+        ).map { status ->
+            OperationalStatusCount(
+                status = status,
+                count = MockAssets.assets.count { it.status == status },
+            )
+        }.filter { it.count > 0 }
+    }
+
+    val maintenanceStatusCounts: List<MaintenanceStatusCount> by lazy {
+        listOf(
+            MaintenanceStatus.Overdue,
+            MaintenanceStatus.DueSoon,
+            MaintenanceStatus.Scheduled,
+            MaintenanceStatus.Completed,
+        ).map { status ->
+            MaintenanceStatusCount(
+                status = status,
+                count = MockMaintenance.records.count { it.status == status },
+            )
+        }
     }
 }

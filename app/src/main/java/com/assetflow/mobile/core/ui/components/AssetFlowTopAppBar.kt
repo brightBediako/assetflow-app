@@ -2,6 +2,7 @@ package com.assetflow.mobile.core.ui.components
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,10 +24,25 @@ fun AssetFlowTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     organizationName: String? = null,
+    userName: String? = null,
     onProfileClick: (() -> Unit)? = null,
+    onBackClick: (() -> Unit)? = null,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
+        navigationIcon = {
+            if (onBackClick != null) {
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.size(AssetFlowSpacing.MinTouchTarget),
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
+                        contentDescription = "Back",
+                    )
+                }
+            }
+        },
         title = {
             if (organizationName.isNullOrBlank()) {
                 Text(
@@ -50,6 +66,15 @@ fun AssetFlowTopAppBar(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
+                    if (!userName.isNullOrBlank()) {
+                        Text(
+                            text = userName,
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
             }
         },

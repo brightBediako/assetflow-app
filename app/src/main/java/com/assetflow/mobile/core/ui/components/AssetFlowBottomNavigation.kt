@@ -1,5 +1,7 @@
 package com.assetflow.mobile.core.ui.components
 
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -17,6 +19,7 @@ fun AssetFlowBottomNavigation(
     selectedDestination: MainDestination,
     onDestinationSelected: (MainDestination) -> Unit,
     modifier: Modifier = Modifier,
+    notificationBadgeCount: Int = 0,
 ) {
     NavigationBar(
         modifier = modifier,
@@ -28,10 +31,23 @@ fun AssetFlowBottomNavigation(
                 selected = selected,
                 onClick = { onDestinationSelected(destination) },
                 icon = {
-                    Icon(
-                        imageVector = destination.icon,
-                        contentDescription = destination.label,
-                    )
+                    if (destination == MainDestination.Notifications && notificationBadgeCount > 0) {
+                        BadgedBox(
+                            badge = {
+                                Badge { Text(text = notificationBadgeCount.coerceAtMost(9).toString()) }
+                            },
+                        ) {
+                            Icon(
+                                imageVector = destination.icon,
+                                contentDescription = destination.label,
+                            )
+                        }
+                    } else {
+                        Icon(
+                            imageVector = destination.icon,
+                            contentDescription = destination.label,
+                        )
+                    }
                 },
                 label = { Text(text = destination.label) },
                 colors = NavigationBarItemDefaults.colors(

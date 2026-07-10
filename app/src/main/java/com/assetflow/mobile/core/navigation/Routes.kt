@@ -4,6 +4,7 @@ object Routes {
     const val Splash = "splash"
     const val Login = "login"
     const val Register = "register"
+    const val Main = "main"
     const val Dashboard = "dashboard"
     const val Assets = "assets"
     const val AssetDetails = "assets/{assetId}"
