@@ -10,8 +10,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.assetflow.mobile.core.data.mock.MockAuthSession
 import com.assetflow.mobile.features.auth.presentation.LoginRoute
 import com.assetflow.mobile.features.auth.presentation.RegisterRoute
+import com.assetflow.mobile.features.profile.presentation.ProfileShellScreen
+import com.assetflow.mobile.features.settings.presentation.SettingsShellScreen
 
 @Composable
 fun AppNavHost(
@@ -72,6 +75,21 @@ fun AppNavHost(
 
         composable(Routes.Profile) {
             ProfileShellScreen(
+                onBackClick = { navController.popBackStack() },
+                onLogoutClick = {
+                    MockAuthSession.signOut()
+                    navController.navigate(Routes.Login) {
+                        popUpTo(Routes.Main) { inclusive = true }
+                    }
+                },
+                onSettingsClick = {
+                    navController.navigate(Routes.Settings)
+                },
+            )
+        }
+
+        composable(Routes.Settings) {
+            SettingsShellScreen(
                 onBackClick = { navController.popBackStack() },
             )
         }

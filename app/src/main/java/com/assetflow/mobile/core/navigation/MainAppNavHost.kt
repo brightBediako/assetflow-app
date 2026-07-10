@@ -2,14 +2,6 @@ package com.assetflow.mobile.core.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -24,10 +16,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.assetflow.mobile.core.data.mock.MockAuthSession
 import com.assetflow.mobile.core.data.mock.MockDataRepository
-import com.assetflow.mobile.core.domain.model.displayLabel
+import com.assetflow.mobile.core.data.mock.MockNotificationStore
 import com.assetflow.mobile.core.ui.components.MainAppScaffold
-import com.assetflow.mobile.core.ui.components.MainScaffoldContent
-import com.assetflow.mobile.core.ui.components.PlaceholderScreen
 import com.assetflow.mobile.features.assets.presentation.AssetDetailsRoute
 import com.assetflow.mobile.features.assets.presentation.AssetListRoute
 import com.assetflow.mobile.features.bookings.presentation.BookingApprovalRoute
@@ -36,6 +26,7 @@ import com.assetflow.mobile.features.bookings.presentation.CreateBookingRoute
 import com.assetflow.mobile.features.dashboard.presentation.DashboardRoute
 import com.assetflow.mobile.features.maintenance.presentation.MaintenanceDetailsRoute
 import com.assetflow.mobile.features.maintenance.presentation.MaintenanceListRoute
+import com.assetflow.mobile.features.notifications.presentation.NotificationsRoute
 
 private fun bookingScreenTitle(route: String?): String = when {
     route == Routes.BookingApprovals -> "Pending Approvals"
@@ -72,7 +63,8 @@ fun MainAppNavHost(
         isBookingSubRoute -> bookingScreenTitle(currentRoute)
         else -> selectedDestination.label
     }
-    val unreadNotifications = MockDataRepository.getUnreadNotificationCount()
+    val notifications by MockNotificationStore::notifications
+    val unreadNotifications = notifications.count { !it.isRead }
 
     val navigateToTab: (MainDestination) -> Unit = { destination ->
         mainNavController.navigate(destination.route) {
@@ -188,41 +180,18 @@ fun MainAppNavHost(
                 )
             }
             composable(Routes.Notifications) {
-                NotificationsTabContent()
+                NotificationsRoute(
+                    onBookingApprovalsClick = {
+                        mainNavController.navigate(Routes.BookingApprovals)
+                    },
+                    onBookingsClick = {
+                        navigateToTab(MainDestination.Bookings)
+                    },
+                    onMaintenanceClick = {
+                        navigateToTab(MainDestination.Maintenance)
+                    },
+                )
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ProfileShellScreen(
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val user = MockDataRepository.currentUser
-
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                title = { Text(text = "Profile") },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = "Back",
-                        )
-                    }
-                },
-            )
-        },
-    ) { paddingValues ->
-        MainScaffoldContent(paddingValues = paddingValues) {
-            PlaceholderScreen(
-                title = user.fullName,
-                message = "${user.role.displayLabel()} · ${MockDataRepository.organization.name}\n${user.email}\n\nFull profile screen arrives in Phase 9.",
-            )
         }
     }
 }

@@ -32,7 +32,7 @@ object MockDataRepository {
 
     val maintenanceRecords: List<MaintenanceRecord> get() = MockMaintenanceStore.records
 
-    val notifications: List<AppNotification> get() = MockNotifications.notifications
+    val notifications: List<AppNotification> get() = MockNotificationStore.notifications
 
     val dashboardSummary: DashboardSummary get() = MockDashboard.summary
 
@@ -57,7 +57,7 @@ object MockDataRepository {
         MockMaintenanceStore.records.firstOrNull { it.id == maintenanceId }
 
     fun getNotificationById(notificationId: String): AppNotification? =
-        MockNotifications.getNotificationById(notificationId)
+        MockNotificationStore.notifications.firstOrNull { it.id == notificationId }
 
     fun getUserById(userId: String): User? = MockUsers.getUserById(userId)
 
@@ -112,7 +112,7 @@ object MockDataRepository {
     fun getMaintenanceByStatus(status: MaintenanceStatus): List<MaintenanceRecord> =
         MockMaintenanceStore.records.filter { it.status == status }
 
-    fun getUnreadNotificationCount(): Int = MockNotifications.getUnreadCount()
+    fun getUnreadNotificationCount(): Int = MockNotificationStore.getUnreadCount()
 
     val assetCategories: List<String> = listOf("All") + MockAssets.categories
 }
