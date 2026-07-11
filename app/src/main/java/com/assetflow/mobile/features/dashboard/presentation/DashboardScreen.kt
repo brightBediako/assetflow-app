@@ -19,17 +19,20 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockDataRepository
 import com.assetflow.mobile.core.domain.model.DashboardActivity
 import com.assetflow.mobile.core.ui.components.AssetFlowButton
 import com.assetflow.mobile.core.ui.components.AssetFlowButtonVariant
 import com.assetflow.mobile.core.ui.components.AssetFlowCard
 import com.assetflow.mobile.core.ui.components.SectionHeader
+import com.assetflow.mobile.core.ui.components.SupportStateHost
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
 import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
@@ -40,6 +43,7 @@ fun DashboardRoute(
     onReportMaintenanceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val contentState by MockContentStateStore::contentState
     val uiState = remember {
         DashboardUiState(
             userName = MockDataRepository.currentUser.fullName,
@@ -53,13 +57,23 @@ fun DashboardRoute(
         )
     }
 
-    DashboardScreen(
-        uiState = uiState,
-        onViewAssetsClick = onViewAssetsClick,
-        onBookAssetClick = onBookAssetClick,
-        onReportMaintenanceClick = onReportMaintenanceClick,
+    SupportStateHost(
+        state = contentState,
+        emptyTitle = "No dashboard data",
+        emptyDescription = "Organization metrics will appear here once assets and bookings are available.",
+        emptyActionLabel = "View assets",
+        onEmptyAction = onViewAssetsClick,
+        onRetry = { MockContentStateStore.reset() },
+        useListPlaceholder = false,
         modifier = modifier,
-    )
+    ) {
+        DashboardScreen(
+            uiState = uiState,
+            onViewAssetsClick = onViewAssetsClick,
+            onBookAssetClick = onBookAssetClick,
+            onReportMaintenanceClick = onReportMaintenanceClick,
+        )
+    }
 }
 
 @Composable

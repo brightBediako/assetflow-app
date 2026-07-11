@@ -10,6 +10,7 @@ context/
 !context/architecture.md
 !context/build-plan.md
 !context/progress-tracker.md
+criteria.md
 
 # Android
 *.iml

@@ -11,14 +11,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.assetflow.mobile.core.data.mock.MockBookingStore
-import com.assetflow.mobile.core.data.mock.MockDataRepository
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.ui.components.AssetFlowButton
 import com.assetflow.mobile.core.ui.components.BookingCard
 import com.assetflow.mobile.core.ui.components.EmptyState
 import com.assetflow.mobile.core.ui.components.SectionHeader
+import com.assetflow.mobile.core.ui.components.SupportStateHost
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
 import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
@@ -29,17 +31,27 @@ fun BookingHistoryRoute(
     modifier: Modifier = Modifier,
 ) {
     val bookings by MockBookingStore::bookings
-    val uiState = loadBookingHistoryUiState()
+    val contentState by MockContentStateStore::contentState
+    val uiState = remember(bookings) { loadBookingHistoryUiState() }
 
-    BookingHistoryScreen(
-        uiState = uiState,
-        onPendingApprovalsClick = onPendingApprovalsClick,
-        onBrowseAssetsClick = onBrowseAssetsClick,
-        onCancelBookingClick = { bookingId ->
-            MockBookingStore.cancelBooking(bookingId)
-        },
+    SupportStateHost(
+        state = contentState,
+        emptyTitle = "No bookings yet",
+        emptyDescription = "Browse assets to request your first reservation.",
+        emptyActionLabel = "Browse assets",
+        onEmptyAction = onBrowseAssetsClick,
+        onRetry = { MockContentStateStore.reset() },
         modifier = modifier,
-    )
+    ) {
+        BookingHistoryScreen(
+            uiState = uiState,
+            onPendingApprovalsClick = onPendingApprovalsClick,
+            onBrowseAssetsClick = onBrowseAssetsClick,
+            onCancelBookingClick = { bookingId ->
+                MockBookingStore.cancelBooking(bookingId)
+            },
+        )
+    }
 }
 
 @Composable
@@ -113,10 +125,10 @@ fun BookingHistoryScreen(
 
         if (uiState.pastBookings.isEmpty()) {
             item {
-                Text(
-                    text = "Completed and cancelled bookings will appear here.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                EmptyState(
+                    title = "No past bookings",
+                    description = "Completed and cancelled bookings will appear here.",
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         } else {

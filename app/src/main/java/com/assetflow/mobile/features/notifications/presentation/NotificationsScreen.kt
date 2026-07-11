@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockNotificationStore
 import com.assetflow.mobile.core.domain.model.AppNotification
 import com.assetflow.mobile.core.domain.model.NotificationType
@@ -23,6 +24,7 @@ import com.assetflow.mobile.core.ui.components.AssetFlowCard
 import com.assetflow.mobile.core.ui.components.EmptyState
 import com.assetflow.mobile.core.ui.components.NotificationCard
 import com.assetflow.mobile.core.ui.components.SectionHeader
+import com.assetflow.mobile.core.ui.components.SupportStateHost
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
 import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
@@ -34,26 +36,34 @@ fun NotificationsRoute(
     modifier: Modifier = Modifier,
 ) {
     val notifications by MockNotificationStore::notifications
+    val contentState by MockContentStateStore::contentState
     val uiState = remember(notifications) { loadNotificationsUiState() }
 
-    NotificationsScreen(
-        uiState = uiState,
-        onMarkAllReadClick = { MockNotificationStore.markAllAsRead() },
-        onNotificationClick = { notification ->
-            MockNotificationStore.markAsRead(notification.id)
-            when (notification.type) {
-                NotificationType.BookingApproval -> {
-                    if (!notification.title.contains("approved", ignoreCase = true)) {
-                        onBookingApprovalsClick()
-                    }
-                }
-                NotificationType.ReturnReminder -> onBookingsClick()
-                NotificationType.MaintenanceAlert -> onMaintenanceClick()
-                NotificationType.SystemAnnouncement -> Unit
-            }
-        },
+    SupportStateHost(
+        state = contentState,
+        emptyTitle = "No notifications",
+        emptyDescription = "Booking, return, maintenance, and system updates will appear here.",
+        onRetry = { MockContentStateStore.reset() },
         modifier = modifier,
-    )
+    ) {
+        NotificationsScreen(
+            uiState = uiState,
+            onMarkAllReadClick = { MockNotificationStore.markAllAsRead() },
+            onNotificationClick = { notification ->
+                MockNotificationStore.markAsRead(notification.id)
+                when (notification.type) {
+                    NotificationType.BookingApproval -> {
+                        if (!notification.title.contains("approved", ignoreCase = true)) {
+                            onBookingApprovalsClick()
+                        }
+                    }
+                    NotificationType.ReturnReminder -> onBookingsClick()
+                    NotificationType.MaintenanceAlert -> onMaintenanceClick()
+                    NotificationType.SystemAnnouncement -> Unit
+                }
+            },
+        )
+    }
 }
 
 @Composable

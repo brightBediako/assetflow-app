@@ -24,7 +24,6 @@ fun AssetFlowTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     organizationName: String? = null,
-    userName: String? = null,
     onProfileClick: (() -> Unit)? = null,
     onBackClick: (() -> Unit)? = null,
 ) {
@@ -66,15 +65,6 @@ fun AssetFlowTopAppBar(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    if (!userName.isNullOrBlank()) {
-                        Text(
-                            text = userName,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
                 }
             }
         },

@@ -38,6 +38,20 @@ val AssetFlowTypography = Typography(
         lineHeight = 36.sp,
         letterSpacing = 0.sp,
     ),
+    headlineMedium = TextStyle(
+        fontFamily = RobotoFlexFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+        letterSpacing = 0.sp,
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = RobotoFlexFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.sp,
+    ),
     titleLarge = TextStyle(
         fontFamily = RobotoFlexFamily,
         fontWeight = FontWeight.Normal,
@@ -51,6 +65,13 @@ val AssetFlowTypography = Typography(
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.15.sp,
+    ),
+    titleSmall = TextStyle(
+        fontFamily = RobotoFlexFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.1.sp,
     ),
     bodyLarge = TextStyle(
         fontFamily = RobotoFlexFamily,
@@ -66,12 +87,26 @@ val AssetFlowTypography = Typography(
         lineHeight = 20.sp,
         letterSpacing = 0.25.sp,
     ),
+    bodySmall = TextStyle(
+        fontFamily = RobotoFlexFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.4.sp,
+    ),
     labelLarge = TextStyle(
         fontFamily = RobotoFlexFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
+    ),
+    labelMedium = TextStyle(
+        fontFamily = RobotoFlexFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        letterSpacing = 0.5.sp,
     ),
     labelSmall = TextStyle(
         fontFamily = RobotoFlexFamily,

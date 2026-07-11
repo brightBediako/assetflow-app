@@ -83,7 +83,7 @@ fun MaintenanceDetailsRoute(
             onScheduleMaintenanceClick = {
                 scope.launch {
                     snackbarHostState.showSnackbar(
-                        message = "Maintenance scheduling will connect after backend integration.",
+                        message = "Schedule request noted. You’ll be notified when a slot is confirmed.",
                     )
                 }
                 scheduleMessageShown = true
@@ -184,7 +184,7 @@ fun MaintenanceDetailsScreen(
         if (showScheduleConfirmation) {
             item {
                 Text(
-                    text = "Scheduling request saved locally for prototype review.",
+                    text = "Schedule request noted. You’ll see updates here when confirmed.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary,
                 )

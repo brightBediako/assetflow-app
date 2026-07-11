@@ -77,7 +77,7 @@ fun LoginRoute(
         onForgotPasswordClick = {
             scope.launch {
                 snackbarHostState.showSnackbar(
-                    message = "Password reset will be available after backend integration.",
+                    message = "Password reset isn’t available in this demo. Contact your admin for help.",
                 )
             }
         },

@@ -14,11 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockMaintenanceStore
 import com.assetflow.mobile.core.ui.components.AssetFlowCard
 import com.assetflow.mobile.core.ui.components.EmptyState
 import com.assetflow.mobile.core.ui.components.MaintenanceCard
 import com.assetflow.mobile.core.ui.components.SectionHeader
+import com.assetflow.mobile.core.ui.components.SupportStateHost
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
 import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
@@ -28,13 +30,21 @@ fun MaintenanceListRoute(
     modifier: Modifier = Modifier,
 ) {
     val records by MockMaintenanceStore::records
+    val contentState by MockContentStateStore::contentState
     val uiState = remember(records) { loadMaintenanceListUiState() }
 
-    MaintenanceListScreen(
-        uiState = uiState,
-        onMaintenanceClick = onMaintenanceClick,
+    SupportStateHost(
+        state = contentState,
+        emptyTitle = "No maintenance records",
+        emptyDescription = "Scheduled and completed maintenance work will appear here.",
+        onRetry = { MockContentStateStore.reset() },
         modifier = modifier,
-    )
+    ) {
+        MaintenanceListScreen(
+            uiState = uiState,
+            onMaintenanceClick = onMaintenanceClick,
+        )
+    }
 }
 
 @Composable

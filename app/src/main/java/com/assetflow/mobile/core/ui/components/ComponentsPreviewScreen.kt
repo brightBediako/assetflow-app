@@ -174,6 +174,16 @@ fun ComponentsPreviewScreen(
             actionLabel = "Browse assets",
             onAction = {},
         )
+
+        SectionHeader(title = "Error state")
+        ErrorState(
+            title = "Could not load data",
+            description = "Something went wrong while loading this screen.",
+            onAction = {},
+        )
+
+        SectionHeader(title = "Network unavailable")
+        NetworkUnavailableState(onRetry = {})
     }
 }
 

@@ -170,7 +170,7 @@ fun CreateBookingScreen(
                 label = "Date",
                 placeholder = "YYYY-MM-DD (e.g. 2026-07-15)",
                 isError = uiState.dateError != null,
-                supportingText = uiState.dateError ?: "Date picker will connect after backend integration.",
+                supportingText = uiState.dateError ?: "Enter the booking date as YYYY-MM-DD.",
             )
             AssetFlowTextField(
                 value = uiState.startTime,
@@ -178,7 +178,7 @@ fun CreateBookingScreen(
                 label = "Start time",
                 placeholder = "09:00",
                 isError = uiState.startTimeError != null,
-                supportingText = uiState.startTimeError,
+                supportingText = uiState.startTimeError ?: "Use 24-hour time (HH:MM).",
             )
             AssetFlowTextField(
                 value = uiState.endTime,
@@ -186,7 +186,7 @@ fun CreateBookingScreen(
                 label = "End time",
                 placeholder = "17:00",
                 isError = uiState.endTimeError != null,
-                supportingText = uiState.endTimeError,
+                supportingText = uiState.endTimeError ?: "Must be later than the start time.",
             )
             AssetFlowTextField(
                 value = uiState.purpose,
@@ -201,12 +201,6 @@ fun CreateBookingScreen(
                 onValueChange = onNotesChange,
                 label = "Notes",
                 placeholder = "Optional delivery or setup notes",
-            )
-
-            Text(
-                text = "Tip: booking 2026-07-10 for an already reserved asset shows the conflict warning.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
 
             AssetFlowButton(

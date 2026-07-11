@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.assetflow.mobile.core.domain.model.OperationalStatus
 import com.assetflow.mobile.core.domain.model.displayLabel
 import com.assetflow.mobile.core.ui.theme.AssetFlowCornerRadius
@@ -33,7 +32,10 @@ fun StatusBadge(
     ) {
         Text(
             text = status.displayLabel(),
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+            modifier = Modifier.padding(
+                horizontal = AssetFlowSpacing.Sm + AssetFlowSpacing.Xs,
+                vertical = AssetFlowSpacing.Xs,
+            ),
             style = MaterialTheme.typography.labelSmall,
             color = contentColor,
         )

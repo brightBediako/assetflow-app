@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,10 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockDataRepository
+import com.assetflow.mobile.core.ui.components.AssetFlowButton
+import com.assetflow.mobile.core.ui.components.AssetFlowButtonVariant
 import com.assetflow.mobile.core.ui.components.AssetFlowSearchField
 import com.assetflow.mobile.core.ui.components.AssetListCard
 import com.assetflow.mobile.core.ui.components.EmptyState
+import com.assetflow.mobile.core.ui.components.SupportStateHost
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
 import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
@@ -32,6 +35,7 @@ fun AssetListRoute(
     onAssetClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val contentState by MockContentStateStore::contentState
     var uiState by remember {
         mutableStateOf(
             AssetListUiState(
@@ -41,27 +45,34 @@ fun AssetListRoute(
         )
     }
 
-    AssetListScreen(
-        uiState = uiState,
-        onSearchQueryChange = { query ->
-            uiState = uiState.copy(searchQuery = query)
-        },
-        onCategorySelected = { category ->
-            uiState = uiState.copy(selectedCategory = category)
-        },
-        onStatusFilterSelected = { filter ->
-            uiState = uiState.copy(selectedStatusFilter = filter)
-        },
-        onClearFiltersClick = {
-            uiState = uiState.copy(
-                searchQuery = "",
-                selectedCategory = "All",
-                selectedStatusFilter = AssetStatusFilter.All,
-            )
-        },
-        onAssetClick = onAssetClick,
+    SupportStateHost(
+        state = contentState,
+        emptyTitle = "No assets yet",
+        emptyDescription = "Assets added to your organization will appear here.",
+        onRetry = { MockContentStateStore.reset() },
         modifier = modifier,
-    )
+    ) {
+        AssetListScreen(
+            uiState = uiState,
+            onSearchQueryChange = { query ->
+                uiState = uiState.copy(searchQuery = query)
+            },
+            onCategorySelected = { category ->
+                uiState = uiState.copy(selectedCategory = category)
+            },
+            onStatusFilterSelected = { filter ->
+                uiState = uiState.copy(selectedStatusFilter = filter)
+            },
+            onClearFiltersClick = {
+                uiState = uiState.copy(
+                    searchQuery = "",
+                    selectedCategory = "All",
+                    selectedStatusFilter = AssetStatusFilter.All,
+                )
+            },
+            onAssetClick = onAssetClick,
+        )
+    }
 }
 
 @Composable
@@ -220,9 +231,11 @@ private fun RowWithClearAction(
     ) {
         content()
         if (showClearAction) {
-            TextButton(onClick = onClearFiltersClick) {
-                Text(text = "Clear filters")
-            }
+            AssetFlowButton(
+                text = "Clear filters",
+                onClick = onClearFiltersClick,
+                variant = AssetFlowButtonVariant.Text,
+            )
         }
     }
 }

@@ -8,26 +8,24 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockSettings
 import com.assetflow.mobile.core.data.mock.MockSettingsStore
+import com.assetflow.mobile.core.domain.model.ContentLoadState
 import com.assetflow.mobile.core.domain.model.ThemePreference
 import com.assetflow.mobile.core.domain.model.displayLabel
 import com.assetflow.mobile.core.ui.components.AssetFlowCard
+import com.assetflow.mobile.core.ui.components.AssetFlowTopAppBar
 import com.assetflow.mobile.core.ui.components.SectionHeader
 import com.assetflow.mobile.core.ui.components.SettingsToggleRow
 import com.assetflow.mobile.core.ui.theme.AssetFlowSpacing
@@ -38,7 +36,10 @@ fun SettingsRoute(
     modifier: Modifier = Modifier,
 ) {
     val settings by MockSettingsStore::settings
-    val uiState = remember(settings) { loadSettingsUiState(settings) }
+    val contentLoadState by MockContentStateStore::contentState
+    val uiState = remember(settings, contentLoadState) {
+        loadSettingsUiState(settings, contentLoadState)
+    }
 
     SettingsScreen(
         uiState = uiState,
@@ -50,6 +51,7 @@ fun SettingsRoute(
         onMaintenanceDueRemindersChange = MockSettingsStore::setMaintenanceDueReminders,
         onBookingStartRemindersChange = MockSettingsStore::setBookingStartReminders,
         onThemePreferenceChange = MockSettingsStore::setThemePreference,
+        onContentLoadStateChange = MockContentStateStore::setContentState,
         modifier = modifier,
     )
 }
@@ -63,16 +65,9 @@ fun SettingsShellScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Settings") },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = "Back",
-                        )
-                    }
-                },
+            AssetFlowTopAppBar(
+                title = "Settings",
+                onBackClick = onBackClick,
             )
         },
     ) { paddingValues ->
@@ -96,6 +91,7 @@ fun SettingsScreen(
     onMaintenanceDueRemindersChange: (Boolean) -> Unit,
     onBookingStartRemindersChange: (Boolean) -> Unit,
     onThemePreferenceChange: (ThemePreference) -> Unit,
+    onContentLoadStateChange: (ContentLoadState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -198,11 +194,46 @@ fun SettingsScreen(
                     }
                 }
                 Text(
-                    text = "Theme preference is saved for this prototype session only.",
+                    text = "Theme changes apply while the app is open.",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = AssetFlowSpacing.Sm),
                 )
+            }
+        }
+
+        item {
+            SectionHeader(title = "Demo screen states")
+        }
+
+        item {
+            AssetFlowCard {
+                Text(
+                    text = "Preview support states",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = "Applies to Dashboard, Assets, Bookings, Maintenance, and Notifications. Set Normal when finished.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = AssetFlowSpacing.Xs),
+                )
+                FlowRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = AssetFlowSpacing.Sm),
+                    horizontalArrangement = Arrangement.spacedBy(AssetFlowSpacing.Sm),
+                    verticalArrangement = Arrangement.spacedBy(AssetFlowSpacing.Sm),
+                ) {
+                    ContentLoadState.entries.forEach { state ->
+                        FilterChip(
+                            selected = uiState.contentLoadState == state,
+                            onClick = { onContentLoadStateChange(state) },
+                            label = { Text(text = state.displayLabel()) },
+                        )
+                    }
+                }
             }
         }
 
@@ -236,7 +267,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(top = AssetFlowSpacing.Sm),
                 )
                 Text(
-                    text = "Privacy policy and terms of use will be linked here after backend launch.",
+                    text = "Privacy policy and terms of use will be available in a future update.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = AssetFlowSpacing.Sm),
@@ -260,6 +291,7 @@ private fun SettingsScreenPreview() {
             onMaintenanceDueRemindersChange = {},
             onBookingStartRemindersChange = {},
             onThemePreferenceChange = {},
+            onContentLoadStateChange = {},
         )
     }
 }

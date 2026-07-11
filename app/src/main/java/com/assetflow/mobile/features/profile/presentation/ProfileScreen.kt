@@ -9,17 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ChevronRight
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,6 +27,7 @@ import com.assetflow.mobile.core.domain.model.UserRole
 import com.assetflow.mobile.core.ui.components.AssetFlowButton
 import com.assetflow.mobile.core.ui.components.AssetFlowButtonVariant
 import com.assetflow.mobile.core.ui.components.AssetFlowCard
+import com.assetflow.mobile.core.ui.components.AssetFlowTopAppBar
 import com.assetflow.mobile.core.ui.components.SectionHeader
 import com.assetflow.mobile.core.ui.components.UserAvatar
 import com.assetflow.mobile.core.ui.theme.AssetFlowCornerRadius
@@ -63,16 +61,9 @@ fun ProfileShellScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(
-                title = { Text(text = "Profile") },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                            contentDescription = "Back",
-                        )
-                    }
-                },
+            AssetFlowTopAppBar(
+                title = "Profile",
+                onBackClick = onBackClick,
             )
         },
     ) { paddingValues ->
@@ -260,7 +251,10 @@ private fun UserRoleBadge(
     ) {
         Text(
             text = label,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+            modifier = Modifier.padding(
+                horizontal = AssetFlowSpacing.Md - AssetFlowSpacing.Xs,
+                vertical = AssetFlowSpacing.Xs,
+            ),
             style = MaterialTheme.typography.labelMedium,
             color = contentColor,
         )

@@ -80,7 +80,6 @@ fun MainAppNavHost(
         modifier = modifier,
         screenTitle = screenTitle,
         organizationName = MockDataRepository.organization.name,
-        userName = MockDataRepository.currentUser.fullName,
         selectedDestination = selectedDestination,
         notificationBadgeCount = unreadNotifications,
         onDestinationSelected = navigateToTab,
