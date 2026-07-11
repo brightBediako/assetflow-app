@@ -93,7 +93,7 @@ private fun AssetFlowTopAppBarPreview() {
     AssetFlowTheme {
         AssetFlowTopAppBar(
             title = "Dashboard",
-            organizationName = "Northbridge University",
+            organizationName = "CodeCraft LTD",
             onProfileClick = {},
         )
     }

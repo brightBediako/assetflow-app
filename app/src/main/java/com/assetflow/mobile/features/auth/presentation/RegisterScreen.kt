@@ -102,7 +102,12 @@ fun RegisterRoute(
             }
 
             uiState = uiState.copy(isLoading = true)
-            MockAuthSession.signIn()
+            MockAuthSession.signInRegisteredUser(
+                fullName = uiState.fullName,
+                email = uiState.email,
+                organizationName = uiState.organization,
+                role = uiState.selectedRole,
+            )
             onRegisterSuccess()
         },
         onBackToLoginClick = onBackToLoginClick,
@@ -157,7 +162,7 @@ fun RegisterScreen(
                 value = uiState.fullName,
                 onValueChange = onFullNameChange,
                 label = "Full name",
-                placeholder = "Ama Mensah",
+                placeholder = "Bright Bediako",
                 isError = uiState.fullNameError != null,
                 supportingText = uiState.fullNameError,
             )
@@ -168,7 +173,7 @@ fun RegisterScreen(
                 value = uiState.organization,
                 onValueChange = onOrganizationChange,
                 label = "Organization",
-                placeholder = "Northbridge University",
+                placeholder = "Takoradi Technical University",
                 isError = uiState.organizationError != null,
                 supportingText = uiState.organizationError,
             )
@@ -284,8 +289,8 @@ private fun RegisterScreenPreview() {
         RegisterScreen(
             uiState = RegisterUiState(
                 fullName = "Kwesi Boateng",
-                organization = "Northbridge University",
-                email = "kwesi.boateng@northbridge.edu",
+                organization = "Takoradi Technical University",
+                email = "kwesi@gmail.com",
             ),
             onFullNameChange = {},
             onOrganizationChange = {},

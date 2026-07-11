@@ -1,6 +1,7 @@
 # Android
 *.iml
 .gradle/
+.kotlin/
 /local.properties
 /.idea/
 .DS_Store
@@ -19,6 +20,7 @@ app/build/
 .Cursor/
 .vscode/
 .agents/skills/
+skills-lock.json
 
 # Scratch notes (not project docs)
 criteria.md

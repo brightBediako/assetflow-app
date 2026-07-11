@@ -12,6 +12,6 @@ object MockSettings {
         returnDueReminders = true,
         maintenanceDueReminders = true,
         bookingStartReminders = false,
-        themePreference = ThemePreference.System,
+        themePreference = ThemePreference.Light,
     )
 }

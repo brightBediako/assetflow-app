@@ -349,8 +349,8 @@ private fun DashboardScreenPreview() {
     AssetFlowTheme {
         DashboardScreen(
             uiState = DashboardUiState(
-                userName = "Ama Mensah",
-                organizationName = "Northbridge University",
+                userName = "Bright Bediako",
+                organizationName = "CodeCraft LTD",
                 summary = MockDataRepository.dashboardSummary,
                 recentActivity = MockDataRepository.recentActivity,
                 categoryDistribution = MockDataRepository.categoryDistribution,

@@ -51,7 +51,7 @@ fun SettingsRoute(
         onMaintenanceDueRemindersChange = MockSettingsStore::setMaintenanceDueReminders,
         onBookingStartRemindersChange = MockSettingsStore::setBookingStartReminders,
         onThemePreferenceChange = MockSettingsStore::setThemePreference,
-        onContentLoadStateChange = MockContentStateStore::setContentState,
+        onContentLoadStateChange = MockContentStateStore::updateContentState,
         modifier = modifier,
     )
 }

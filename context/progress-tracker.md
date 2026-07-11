@@ -8,12 +8,12 @@ The current workflow is UI-first with dummy data. Do not mark backend/API/databa
 
 ## Current Status
 
-**Phase:** UI prototype delivered — awaiting approval  
-**Last completed:** 20 Visual QA Pass  
+**Phase:** Demo-ready UI delivered — awaiting approval for backend  
+**Last completed:** Demo-ready production cleanup  
 **In progress:** Paused  
 **Next:** Later Phase - Backend Wiring (only after explicit UI approval)
 
-The UI-first delivery (features 01–20) is complete. Major workflows are navigable with dummy data and do not depend on a backend.
+The UI-first delivery (features 01–20) is complete and demo-ready. Landing is the cold-start entry; default theme is Light; mock/demo accounts and Settings demo screen states are preserved. Major workflows are navigable with dummy data and do not depend on a backend.
 
 ---
 
@@ -94,6 +94,9 @@ The UI-first delivery (features 01–20) is complete. Major workflows are naviga
 - `MockAuthSession` tracks prototype login state; login screen uses mock user email prefilled from `MockDataRepository`.
 - Feature 19 uses `MockContentStateStore` (Settings → Demo screen states) so Assets, Bookings, Maintenance, Notifications, and Dashboard can preview empty/loading/error/offline states without a backend.
 - Feature 20 Visual QA: scrubbed user-facing backend/prototype copy, completed Roboto Flex typography roles, slimmed top app bar to title + organization, aligned Profile/Settings bars with `AssetFlowTopAppBar`, removed unused placeholder helpers.
+- Pre-login Landing: replaced auto-skip splash with Welcome screen (brand, capabilities, Log in / Create account). Logout and unauth redirect return to Landing. Dashboard remains signed-in home.
+- Default theme is Light (`MockSettings.themePreference` + `AssetFlowTheme` default).
+- Demo-ready cleanup: removed unused Compose gallery preview screens, ignored `.kotlin/` and `skills-lock.json`, kept all mock/demo data and accounts.
 
 ---
 

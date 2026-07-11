@@ -48,7 +48,7 @@ After building any component — update this file with the component name, file 
 | Source | File | Notes |
 |--------|------|-------|
 | MockDataRepository | `core/data/mock/MockDataRepository.kt` | Central lookup API for all prototype screens |
-| MockUsers | `core/data/mock/MockUsers.kt` | Organization + 4 staff users |
+| MockUsers | `core/data/mock/MockUsers.kt` | 2 orgs + 3 demo users (Bright, Nana Ama, Kwesi) |
 | MockAssets | `core/data/mock/MockAssets.kt` | 14 assets across 7 categories |
 | MockBookings | `core/data/mock/MockBookings.kt` | Pending, approved, active, completed, cancelled |
 | MockMaintenance | `core/data/mock/MockMaintenance.kt` | Scheduled, due soon, overdue, completed + history |
@@ -69,6 +69,7 @@ After building any component — update this file with the component name, file 
 | MainAppNavHost | `core/navigation/MainAppNavHost.kt` | Authenticated shell: single scaffold + nested tab NavHost + auth guard |
 | ProfileShellScreen | `features/profile/presentation/ProfileScreen.kt` | Profile detail with back navigation, outside bottom tabs |
 | SettingsShellScreen | `features/settings/presentation/SettingsScreen.kt` | Settings detail with back navigation, outside bottom tabs |
+| Routes.Landing | `core/navigation/Routes.kt` | Pre-auth start destination (Welcome) |
 | Routes.Main | `core/navigation/Routes.kt` | Root route for authenticated main app graph |
 
 | MockAuthSession | `core/data/mock/MockAuthSession.kt` | Prototype sign-in/sign-out flag for UI-only auth flow |
@@ -77,12 +78,14 @@ After building any component — update this file with the component name, file 
 
 | Screen | File | Notes |
 |--------|------|-------|
+| LandingScreen | `features/auth/presentation/LandingScreen.kt` | Welcome entry: brand, value copy, capability rows, Log in / Create account |
+| LandingRoute | `features/auth/presentation/LandingScreen.kt` | Navigation callbacks only |
 | LoginScreen | `features/auth/presentation/LoginScreen.kt` | Email/password form, brand header, forgot password snackbar, links to register |
-| LoginRoute | `features/auth/presentation/LoginScreen.kt` | Wires state, validation, `MockAuthSession.signIn()`, navigation callbacks |
+| LoginRoute | `features/auth/presentation/LoginScreen.kt` | Wires state, email lookup, `MockAuthSession.signIn(user)`, navigation callbacks |
 | LoginUiState | `features/auth/presentation/LoginUiState.kt` | Email, password, loading, field errors |
-| AuthBrandHeader | `features/auth/presentation/AuthBrandHeader.kt` | Shared logo/title block for login and register |
+| AuthBrandHeader | `features/auth/presentation/AuthBrandHeader.kt` | Shared logo/title block for landing, login, and register |
 | RegisterScreen | `features/auth/presentation/RegisterScreen.kt` | Full registration form with role chips |
-| RegisterRoute | `features/auth/presentation/RegisterScreen.kt` | Validation, `MockAuthSession.signIn()`, navigation |
+| RegisterRoute | `features/auth/presentation/RegisterScreen.kt` | Validation, `MockAuthSession.signInRegisteredUser()`, navigation |
 | RegisterUiState | `features/auth/presentation/RegisterUiState.kt` | Name, org, email, passwords, role, errors |
 
 ## Dashboard Screens

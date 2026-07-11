@@ -1,7 +1,7 @@
 package com.assetflow.mobile.core.navigation
 
 object Routes {
-    const val Splash = "splash"
+    const val Landing = "landing"
     const val Login = "login"
     const val Register = "register"
     const val Main = "main"

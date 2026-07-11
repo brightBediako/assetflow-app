@@ -75,7 +75,7 @@ object MockNotifications {
             id = "notif-008",
             type = NotificationType.BookingApproval,
             title = "Booking approval needed",
-            message = "Daniel Osei requested the Shure microphone pack for Jul 18 evening event.",
+            message = "Bright Bediako requested the Shure microphone pack for Jul 18 evening event.",
             timestamp = "Jul 7, 19:45",
             isRead = false,
             relatedAssetId = "asset-008",

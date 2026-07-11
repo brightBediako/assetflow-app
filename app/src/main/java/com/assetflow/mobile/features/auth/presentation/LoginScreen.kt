@@ -26,7 +26,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.assetflow.mobile.core.data.mock.MockAuthSession
-import com.assetflow.mobile.core.data.mock.MockDataRepository
+import com.assetflow.mobile.core.data.mock.MockUsers
 import com.assetflow.mobile.core.ui.components.AssetFlowButton
 import com.assetflow.mobile.core.ui.components.AssetFlowButtonVariant
 import com.assetflow.mobile.core.ui.components.AssetFlowTextField
@@ -45,7 +45,7 @@ fun LoginRoute(
     var uiState by remember {
         mutableStateOf(
             LoginUiState(
-                email = MockDataRepository.currentUser.email,
+                email = MockUsers.brightBediako.email,
             ),
         )
     }
@@ -59,7 +59,13 @@ fun LoginRoute(
             uiState = uiState.copy(password = password, passwordError = null)
         },
         onLoginClick = {
-            val emailError = if (uiState.email.isBlank()) "Email is required" else null
+            val trimmedEmail = uiState.email.trim()
+            val emailError = when {
+                trimmedEmail.isBlank() -> "Email is required"
+                MockUsers.getUserByEmail(trimmedEmail) == null ->
+                    "No demo account found for this email. Use bright@gmail.com, ama@gmail.com, or kwesi@gmail.com."
+                else -> null
+            }
             val passwordError = if (uiState.password.isBlank()) "Password is required" else null
 
             if (emailError != null || passwordError != null) {
@@ -70,8 +76,9 @@ fun LoginRoute(
                 return@LoginScreen
             }
 
+            val user = MockUsers.getUserByEmail(trimmedEmail) ?: return@LoginScreen
             uiState = uiState.copy(isLoading = true)
-            MockAuthSession.signIn()
+            MockAuthSession.signIn(user)
             onLoginSuccess()
         },
         onForgotPasswordClick = {
@@ -190,7 +197,7 @@ private fun LoginScreenPreview() {
     AssetFlowTheme {
         LoginScreen(
             uiState = LoginUiState(
-                email = "ama.mensah@northbridge.edu",
+                email = "bright@gmail.com",
             ),
             onEmailChange = {},
             onPasswordChange = {},

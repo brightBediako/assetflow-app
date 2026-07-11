@@ -2,7 +2,8 @@
 
 Native Android app for managing shared organizational assets — bookings, maintenance, notifications, and utilization insights.
 
-**Current delivery:** UI-first prototype with centralized dummy data.  
+**Current delivery:** Demo-ready UI build with centralized mock data.  
+**Default theme:** Light  
 **Not included yet:** Spring Boot APIs, JWT auth, Room, Retrofit, or WorkManager (planned after UI approval).
 
 ---
@@ -51,14 +52,17 @@ Or open the project in Android Studio and run the `app` configuration on an emul
 
 ## Demo login
 
-The login screen is prefilled with the mock manager account:
+1. Open the app → **Welcome / Landing**
+2. Tap **Log in** (or **Create account**)
+3. Use any of these accounts. Password can be any non-empty value.
 
-| Field | Value |
-|-------|--------|
-| Email | `ama.mensah@northbridge.edu` |
-| Password | Any non-empty value |
+| Name | Email | Organization | Role |
+|------|-------|--------------|------|
+| Bright Bediako | `bright@gmail.com` | CodeCraft LTD | System Admin |
+| Nana Ama | `ama@gmail.com` | Takoradi Technical University | Manager |
+| Kwesi Boateng | `kwesi@gmail.com` | Takoradi Technical University | Staff |
 
-Tap **Log in** to enter the main app. No real authentication is performed.
+The login screen is prefilled with Bright’s email. Tap **Log in** to enter the main app (Dashboard). Logout returns to the Landing screen. No real authentication is performed.
 
 ---
 
@@ -96,7 +100,7 @@ Root `AGENTS.md` is the entry point for AI agents.
 
 ## Status
 
-- [x] UI prototype features 01–20  
+- [x] Demo-ready UI (features 01–20 + Landing)  
 - [ ] Backend wiring (JWT, Retrofit, Spring Boot, PostgreSQL, Room, WorkManager)
 
-Do not start backend work until this UI prototype is approved.
+Do not start backend work until this UI delivery is approved.

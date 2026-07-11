@@ -13,7 +13,7 @@ object MockContentStateStore {
     var contentState by mutableStateOf(ContentLoadState.Normal)
         private set
 
-    fun setContentState(state: ContentLoadState) {
+    fun updateContentState(state: ContentLoadState) {
         contentState = state
     }
 

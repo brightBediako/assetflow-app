@@ -7,7 +7,7 @@ enum class UserRole {
 }
 
 fun UserRole.displayLabel(): String = when (this) {
-    UserRole.Admin -> "Admin"
+    UserRole.Admin -> "System Admin"
     UserRole.Staff -> "Staff"
     UserRole.Manager -> "Manager"
 }

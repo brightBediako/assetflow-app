@@ -48,6 +48,6 @@ fun UserAvatar(
 @Composable
 private fun UserAvatarPreview() {
     AssetFlowTheme {
-        UserAvatar(fullName = "Ama Mensah")
+        UserAvatar(fullName = "Bright Bediako")
     }
 }
