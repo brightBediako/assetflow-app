@@ -40,12 +40,14 @@ Use these files as the source of truth. If they conflict, prefer the most specif
 - Language: Kotlin
 - UI: Jetpack Compose
 - Architecture: MVVM
-- Current phase: UI-first prototype
+- Current phase: UI prototype complete (features 01–20); awaiting approval
 - Data source for now: centralized dummy data
 - Backend later: Java Spring Boot REST APIs
 - Database later: PostgreSQL through backend APIs
 - Local cache later: Room Database
 - Background work later: WorkManager
+
+Do not start Retrofit, Room, JWT, or WorkManager wiring until the UI prototype is approved.
 
 ---
 

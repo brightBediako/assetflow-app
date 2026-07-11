@@ -4,8 +4,10 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.assetflow.mobile.core.data.mock.MockContentStateStore
 import com.assetflow.mobile.core.data.mock.MockSettingsStore
 import com.assetflow.mobile.core.domain.model.ThemePreference
 import com.assetflow.mobile.core.navigation.AppNavHost
@@ -13,6 +15,10 @@ import com.assetflow.mobile.core.ui.theme.AssetFlowTheme
 
 @Composable
 fun AssetFlowApp() {
+    LaunchedEffect(Unit) {
+        MockContentStateStore.reset()
+    }
+
     val settings by MockSettingsStore::settings
     val darkTheme = when (settings.themePreference) {
         ThemePreference.System -> isSystemInDarkTheme()
